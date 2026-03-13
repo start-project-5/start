@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,6 +28,21 @@ async function bootstrap() {
 
   // Allow the frontend to call this API from a different origin
   app.enableCors();
+
+    const swaggerConfig = new DocumentBuilder()
+    .setTitle('City Tourism API')
+    .setDescription(
+      'REST API for a single-city tourism platform. ' +
+      'Tourists can find guides, book tours, explore restaurants, hotels, attractions and more.',
+    )
+    .setVersion('1.0')
+    .addBearerAuth() // adds the 🔒 Authorize button for JWT tokens
+    .build();
+ 
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+ 
+  // First arg is the path where Swagger UI is served → /docs
+  SwaggerModule.setup('docs', app, document);
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);

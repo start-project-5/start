@@ -1,3 +1,5 @@
+import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Review } from 'src/modules/review/entity/review.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,8 +9,6 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
-import { Review }  from '../../reviews/entities/review.entity';
-import { Booking } from '../../bookings/entities/booking.entity';
 
 /**
  * Guide — a local city guide that tourists can book.
@@ -19,6 +19,7 @@ import { Booking } from '../../bookings/entities/booking.entity';
  * Example:
  *   availableDays = ["monday", "wednesday", "friday"]
  */
+
 @Entity('guides')
 export class Guide {
   @PrimaryGeneratedColumn()

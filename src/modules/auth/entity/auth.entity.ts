@@ -1,3 +1,6 @@
+import { UserRole } from 'src/common/enum/user-role.enum';
+import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Review } from 'src/modules/review/entity/review.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,8 +10,6 @@ import {
   OneToMany,
   Index,
 } from 'typeorm';
-import { Review }  from '../../reviews/entities/review.entity';
-import { Booking } from '../../bookings/entities/booking.entity';
 
 /**
  * User — a registered tourist on the platform.
@@ -20,17 +21,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 100 })
+  @Column({ length: 50, unique: true })
   name: string;
 
   /** Indexed for fast lookups during login */
   @Index()
-  @Column({ unique: true, length: 150 })
+  @Column({ unique: true, length: 100 })
   email: string;
 
   /** Always store a hashed password — never plain text */
   @Column()
   password: string;
+
+  @Column({ default: UserRole.TOURIST })
+  role: UserRole;
 
   // ── Relations ──────────────────────────────────────────────────────────
 
