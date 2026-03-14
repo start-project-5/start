@@ -25,7 +25,7 @@ import { DatabaseConfig } from './config/db-config';
     }),
 
     // 3. Feature modules
-    UsersModule,
+    // UsersModule,
   ],
 })
 export class AppModule {}
