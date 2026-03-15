@@ -1,42 +1,51 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+  MaxLength,
+} from 'class-validator';
+import { BaseEntity } from 'src/database/base.entity';
+import { Entity, Column, Index, UpdateDateColumn } from 'typeorm';
 
-/**
- * Museum — museums and cultural institutions in the city.
- */
 @Entity('museums')
-export class Museum {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 150 })
+export class Museum extends BaseEntity {
+  @Index({ fulltext: true }) //Qidiruvni tezlashtirish uchun
+  @Column({ type: 'varchar', length: 150, comment: "Muzeyning to'liq nomi" })
+  @IsNotEmpty()
+  @MaxLength(150)
   name: string;
 
-  @Column({ type: 'text' })
+  @Column({
+    type: 'text',
+    nullable: true,
+    comment: 'Muzey haqida batafsil malimot',
+  })
+  @IsOptional()
+  @IsString()
   description: string;
 
-  // @Column()
-  // workingTime: string; 08:00-20:00
-
-  //   @Column()
-  // workingDay: string; // Monday - Friday
-
-  @Column({ length: 255 })
+  @Column({ type: 'varchar', length: 500, comment: 'Fizik manzili' })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(500)
   address: string;
 
-  @Column({ nullable: true })
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    comment: 'Asosiy rasm URL manzili',
+  })
+  @IsOptional()
+  @IsUrl({}, { message: "Rasm formati xato (URL bo'lishi kerak)" })
   image: string;
 
-  // ── Timestamps ─────────────────────────────────────────────────────────
+  // Seniorlar odatda bazaga xarita koordinatalarini ham qoshishadi
+  @Column({ type: 'decimal', precision: 10, scale: 8, nullable: true })
+  latitude: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
-
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
+  longitude: number;
   @UpdateDateColumn()
   updatedAt: Date;
 }

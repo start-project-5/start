@@ -1,0 +1,1 @@
+export const NAME_REGEX = /^[_a-zA-ZÀ-ÿ\s'-]+$/;
