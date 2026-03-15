@@ -6,9 +6,11 @@
  * ADMIN    → platform administrator; full access
  */
 export enum UserRole {
-
   // obichnioy user
   TOURIST = 'tourist',
+
+  // hotel, restaran, event qo'shib bilado'n odam
+  BUSINESS_OWNER = 'business_owner',
 
   // gid
   GUIDE = 'guide',
@@ -18,7 +20,4 @@ export enum UserRole {
 
   // superadmin
   SUPERADMIN = 'superadmin',
-
-  // hotel, restaran, event qo'shib bilado'n odam 
-  BUSINESS_OWNER = 'business_owner',
 }

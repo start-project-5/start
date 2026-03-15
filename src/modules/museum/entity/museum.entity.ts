@@ -6,14 +6,14 @@ import {
   MaxLength,
 } from 'class-validator';
 import { BaseEntity } from 'src/database/base.entity';
-import { Entity, Column, Index } from 'typeorm';
+import { Entity, Column, Index, UpdateDateColumn } from 'typeorm';
 
 @Entity('museums')
 export class Museum extends BaseEntity {
   @Index({ fulltext: true }) //Qidiruvni tezlashtirish uchun
   @Column({ type: 'varchar', length: 150, comment: "Muzeyning to'liq nomi" })
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(150)
   name: string;
 
   @Column({
@@ -42,8 +42,10 @@ export class Museum extends BaseEntity {
 
   // Seniorlar odatda bazaga xarita koordinatalarini ham qoshishadi
   @Column({ type: 'decimal', precision: 10, scale: 8, nullable: true })
-  latitude: string;
+  latitude: number;
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
-  longitude: string;
+  longitude: number;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
