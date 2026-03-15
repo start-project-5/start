@@ -11,6 +11,7 @@ import { Booking } from 'src/modules/booking/entity/booking.entity';
 import { Event } from 'src/modules/event/entity/event.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
+import { Log } from 'src/modules/logger/logger.entity';
 import { Museum } from 'src/modules/museum/entity/museum.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
@@ -49,7 +50,8 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         Museum,
         Event,
         Transport,
-        Profile
+        Profile,
+        Log,
       ],
 
       // ⚠️  synchronize:true is fine during development.

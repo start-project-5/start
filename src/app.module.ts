@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './config/db-config';
+import { LoggerModule } from './modules/logger/logger.module';
 
 /**
  * AppModule — the root module of the application.
@@ -24,8 +25,11 @@ import { DatabaseConfig } from './config/db-config';
       useClass: DatabaseConfig,
     }),
 
+    
+
     // 3. Feature modules
     // UsersModule,
+    LoggerModule,
   ],
 })
 export class AppModule {}

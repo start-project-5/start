@@ -29,26 +29,43 @@ async function bootstrap() {
   // Allow the frontend to call this API from a different origin
   app.enableCors();
 
-    const swaggerConfig = new DocumentBuilder()
+  // Swagger
+
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('City Tourism API')
     .setDescription(
       'REST API for a single-city tourism platform. ' +
-      'Tourists can find guides, book tours, explore restaurants, hotels, attractions and more.',
+        'Tourists can find guides, book tours, explore restaurants, hotels, attractions and more.',
     )
     .setVersion('1.0')
-    .addBearerAuth() // adds the 🔒 Authorize button for JWT tokens
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'access-token',
+    )
     .build();
- 
+
   const document = SwaggerModule.createDocument(app, swaggerConfig);
- 
-  // First arg is the path where Swagger UI is served → /docs
-  SwaggerModule.setup('docs', app, document);
+
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      docExpansion: 'none',
+      filter: true,
+      showRequestDuration: true,
+    },
+  });
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
 
   console.log(`🚀  Server is running → http://localhost:${port}/api`);
-  console.log("Documantation link: http://localhost:" + port + "/docs");
+  console.log('Documantation link: http://localhost:' + port + '/docs');
 }
 
 bootstrap();

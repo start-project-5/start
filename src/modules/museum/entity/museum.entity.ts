@@ -46,6 +46,4 @@ export class Museum extends BaseEntity {
 
   @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
   longitude: number;
-  @UpdateDateColumn()
-  updatedAt: Date;
 }
