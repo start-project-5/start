@@ -1,4 +1,5 @@
 import { User } from 'src/modules/auth/entity/auth.entity';
+import { Guide } from 'src/modules/guide/entity/guide.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
