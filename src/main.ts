@@ -48,6 +48,7 @@ async function bootstrap() {
   await app.listen(port);
 
   console.log(`🚀  Server is running → http://localhost:${port}/api`);
+  console.log("Documantation link: http://localhost:" + port + "/docs");
 }
 
 bootstrap();
