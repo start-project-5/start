@@ -34,6 +34,7 @@ export class Event {
   date: Date;
 
   /** Person or company running the event */
+  // auth bilan relation atamiz 
   @Column({ length: 150 })
   organizer: string;
 
