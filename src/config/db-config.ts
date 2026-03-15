@@ -8,22 +8,13 @@ import { Attraction } from 'src/modules/attraction/entity/attraction.entity';
 
 import { User } from 'src/modules/auth/entity/auth.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Event } from 'src/modules/event/entity/event.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { Museum } from 'src/modules/museum/entity/museum.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import { Transport } from 'src/modules/transport/entity/transport.entity';
-// import { User }       from '../modules/users/entities/user.entity';
-// import { Guide }      from '../modules/guides/entities/guide.entity';
-// import { Review }     from '../modules/reviews/entities/review.entity';
-// import { Booking }    from '../modules/bookings/entities/booking.entity';
-// import { Restaurant } from '../modules/restaurants/entities/restaurant.entity';
-// import { Hotel }      from '../modules/hotels/entities/hotel.entity';
-// import { Attraction } from '../modules/attractions/entities/attraction.entity';
-// import { Museum }     from '../modules/museums/entities/museum.entity';
-// import { Event }      from '../modules/events/entities/event.entity';
-// import { Transport }  from '../modules/transport/entities/transport.entity';
 
 /**
  * DatabaseConfig reads connection settings from .env via ConfigService
@@ -40,11 +31,11 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
     return {
       type: 'postgres',
 
-      host:     this.config.get<string>('DB_HOST',     'localhost'),
-      port:     this.config.get<number>('DB_PORT',     5432),
-      username: this.config.get<string>('DB_USERNAME', 'postgres'),
-      password: this.config.get<string>('DB_PASSWORD', 'postgres'),
-      database: this.config.get<string>('DB_NAME',     'city_tourism'),
+      host: this.config.get<string>('DB_HOST'),
+      port: this.config.get<number>('DB_PORT'),
+      username: this.config.get<string>('DB_USERNAME'),
+      password: this.config.get<string>('DB_PASSWORD'),
+      database: this.config.get<string>('DB_NAME'),
 
       entities: [
         User,

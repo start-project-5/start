@@ -20,6 +20,12 @@ export class Museum {
   @Column({ type: 'text' })
   description: string;
 
+  // @Column()
+  // workingTime: string; 08:00-20:00
+
+  //   @Column()
+  // workingDay: string; // Monday - Friday
+
   @Column({ length: 255 })
   address: string;
 

@@ -16,7 +16,7 @@ import { DatabaseConfig } from './config/db-config';
     // 1. Make .env values available everywhere via ConfigService
     ConfigModule.forRoot({
       envFilePath: '.env',
-      isGlobal: true,   // no need to import ConfigModule again in other modules
+      isGlobal: true, // no need to import ConfigModule again in other modules
     }),
 
     // 2. Connect to the database using our DatabaseConfig class
