@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/database/base.entity';
 import { User } from 'src/modules/auth/entity/auth.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import {
@@ -16,10 +17,7 @@ import {
  * Many reviews → one guide (the guide being reviewed)
  */
 @Entity('reviews')
-export class Review {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Review extends BaseEntity {
   /** Score between 1 (worst) and 5 (best) */
   @Column({ type: 'smallint' })
   rating: number;
@@ -49,7 +47,4 @@ export class Review {
   guideId: number;
 
   // ── Timestamps ─────────────────────────────────────────────────────────
-
-  @CreateDateColumn()
-  createdAt: Date;
 }

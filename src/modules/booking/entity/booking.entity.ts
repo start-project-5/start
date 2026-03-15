@@ -1,62 +1,48 @@
+import { Entity, Column, Index, ManyToOne, JoinColumn, Unique } from 'typeorm';
+import { BaseEntity } from 'src/database/base.entity';
 import { User } from 'src/modules/auth/entity/auth.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { IsDateString, IsEnum, IsNumber, Min } from 'class-validator';
+import { BookingStatus } from 'src/common/enum/booking-status.enum';
 
-/**
- * Booking — a tourist reserving a guide for one full day.
- *
- * Booking model: per day only (no hourly slots).
- * The date column stores the calendar date, e.g. "2024-08-15".
- *
- * Status lifecycle:
- *   pending → confirmed  (guide accepts)
- *   pending → cancelled  (tourist or guide cancels)
- */
 @Entity('bookings')
-export class Booking {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  /**
-   * The day of the tour.
-   * TypeORM stores this as a DATE column (no time).
-   * Example: "2024-08-15"
-   */
-  @Column({ type: 'date' })
+@Unique(['guide', 'date']) // Senior darajadagi himoya: Bir gid bitta sanada faqat bir marta bron qilinishi mumkin
+export class Booking extends BaseEntity {
+  
+  @Column({ type: 'date', comment: 'Bron qilingan kun (YYYY-MM-DD)' })
+  @IsDateString()
   date: string;
 
-  /**
-   * Current state of the booking.
-   * Possible values: "pending" | "confirmed" | "cancelled"
-   */
-  @Column({ default: 'pending' })
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: BookingStatus,
+    default: BookingStatus.PENDING,
+    comment: 'Bron holati'
+  })
+  @IsEnum(BookingStatus)
+  status: BookingStatus;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2, comment: 'Bron qilingan vaqtdagi narx' })
+  @IsNumber()
+  @Min(0)
+  totalPrice: number;
+
+  @Column({ type: 'text', nullable: true, comment: 'Turistning maxsus talablari' })
+  notes: string;
 
   // ── Relations ──────────────────────────────────────────────────────────
 
-  @ManyToOne(() => User, (user) => user.bookings, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.bookings, { onDelete: 'RESTRICT' }) // Foydalanuvchi o'chsa ham bron tarixi qolishi kerak (Audit uchun)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @Column({ name: 'user_id', type: 'uuid' }) // UUID ishlatish tavsiya etiladi
+  userId: string;
 
-  @ManyToOne(() => Guide, (guide) => guide.bookings, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Guide, (guide) => guide.bookings, { onDelete: 'RESTRICT' })
   @JoinColumn({ name: 'guide_id' })
   guide: Guide;
 
-  @Column({ name: 'guide_id' })
-  guideId: number;
-
-  // ── Timestamps ─────────────────────────────────────────────────────────
-
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ name: 'guide_id', type: 'uuid' })
+  guideId: string;
 }

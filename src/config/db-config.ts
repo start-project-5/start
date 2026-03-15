@@ -8,9 +8,11 @@ import { Attraction } from 'src/modules/attraction/entity/attraction.entity';
 
 import { User } from 'src/modules/auth/entity/auth.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Event } from 'src/modules/event/entity/event.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { Museum } from 'src/modules/museum/entity/museum.entity';
+import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import { Transport } from 'src/modules/transport/entity/transport.entity';
@@ -57,6 +59,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         Museum,
         Event,
         Transport,
+        Profile
       ],
 
       // ⚠️  synchronize:true is fine during development.

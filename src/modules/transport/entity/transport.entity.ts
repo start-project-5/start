@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/database/base.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,10 +18,7 @@ import {
  *   WHERE type = 'airport'
  */
 @Entity('transports')
-export class Transport {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Transport extends BaseEntity {
   @Column({ length: 150 })
   name: string;
 
@@ -39,10 +37,4 @@ export class Transport {
   phone: string;
 
   // ── Timestamps ─────────────────────────────────────────────────────────
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }
