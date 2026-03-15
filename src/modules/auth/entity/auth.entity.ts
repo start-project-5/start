@@ -1,5 +1,7 @@
 import { UserRole } from 'src/common/enum/user-role.enum';
+import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import {
   Entity,
@@ -9,6 +11,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
+  OneToOne,
 } from 'typeorm';
 
 /**
@@ -17,11 +20,8 @@ import {
  * One user can write many reviews and make many bookings.
  */
 @Entity('users')
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({ length: 50, unique: true })
+export class User extends BaseEntity {
+  @Column({ length: 50, unique: true, nullable: true })
   name: string;
 
   /** Indexed for fast lookups during login */
@@ -43,12 +43,10 @@ export class User {
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
+  
+  // Profile bilan bog'liqlik saqlanib qoladi
+  // @OneToOne(() => Profile, (profile) => profile.user, { cascade: true, onDelete: "CASCADE" })
+  // profile: Profile;
 
   // ── Timestamps ─────────────────────────────────────────────────────────
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

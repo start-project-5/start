@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn, 
   DeleteDateColumn,
+  VersionColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -21,4 +22,7 @@ export abstract class BaseEntity {
 
   @DeleteDateColumn({ type: 'timestamptz', nullable: true, select: false })
   deletedAt: Date;
+
+  // @VersionColumn({ comment: "Ma'lumot versiyasi, har tahrirda +1 bo'ladi" })
+  // version: number;
 }

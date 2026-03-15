@@ -1,3 +1,4 @@
+import { BaseEntity } from 'src/database/base.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,10 +15,7 @@ import {
  * Location is stored directly as address + coordinates.
  */
 @Entity('restaurants')
-export class Restaurant {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Restaurant extends BaseEntity {
   @Column({ length: 150 })
   name: string;
 
@@ -43,10 +41,4 @@ export class Restaurant {
   rating: number;
 
   // ── Timestamps ─────────────────────────────────────────────────────────
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }
