@@ -5,8 +5,9 @@ import { LoggerService } from '../modules/logger/logger.service';
 
 @Injectable()
 export class EmailSender {
-  private transporter: nodemailer.Transporter;
-
+  private transporter: nodemailer.Transporter;  
+ 
+  
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
