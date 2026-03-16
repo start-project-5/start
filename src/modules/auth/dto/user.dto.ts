@@ -1,6 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -9,6 +10,11 @@ import {
   MinLength,
 } from 'class-validator';
 import { NAME_REGEX } from 'src/common/enum/regix.enum';
+import { UserRole } from 'src/common/enum/user-role.enum';
+
+// ─────────────────────────────────────────────────────────────
+// MAVJUD DTOlar (o'zgartirilmadi)
+// ─────────────────────────────────────────────────────────────
 
 export class CreateUserDto {
   @ApiProperty({
@@ -45,4 +51,73 @@ export class UpdateUserDto {
   @IsString()
   @Length(2, 100)
   name?: string;
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUTH DTOlar — ro'yxatdan o'tish va tizimga kirish
+// ─────────────────────────────────────────────────────────────
+
+export class SignUpDto {
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  email: string;
+
+  @ApiProperty({ example: 'P@ssw0rd123', minLength: 6 })
+  @IsString()
+  @MinLength(6, { message: 'password must be at least 6 characters' })
+  password: string;
+
+  @ApiPropertyOptional({ enum: UserRole, example: UserRole.TOURIST })
+  @IsOptional()
+  @IsEnum(UserRole, { message: "Noto'g'ri rol kiritildi" })
+  role?: UserRole;
+}
+
+export class SignInDto {
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  email: string;
+
+  @ApiProperty({ example: 'P@ssw0rd123' })
+  @IsString()
+  @IsNotEmpty({ message: "Parol bo'sh bo'lmasligi kerak" })
+  password: string;
+}
+
+export class VerifyEmailDto {
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  email: string;
+
+  @ApiProperty({ example: '847392', description: '6 xonali OTP kodi' })
+  @IsString()
+  @IsNotEmpty({ message: "OTP kodi bo'sh bo'lmasligi kerak" })
+  otpCode: string;
+}
+
+export class ForgotPasswordDto {
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  email: string;
+}
+
+export class ResetPasswordDto {
+  @ApiProperty({ example: 'john@example.com' })
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'email must be a valid email address' })
+  email: string;
+
+  @ApiProperty({ example: '847392', description: '6 xonali OTP kodi' })
+  @IsString()
+  @IsNotEmpty({ message: "OTP kodi bo'sh bo'lmasligi kerak" })
+  otpCode: string;
+
+  @ApiProperty({ example: 'NewP@ss123', minLength: 6 })
+  @IsString()
+  @MinLength(6, { message: 'password must be at least 6 characters' })
+  newPassword: string;
 }

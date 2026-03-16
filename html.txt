@@ -1,0 +1,33 @@
+src papka
+common papka/ichida
+decorators/ichid/
+current-user.decorator
+public.decorator.ts
+roles.decorator.ts
+
+config papka/ichida
+db.config.ts
+database papka/
+base.enttiy.ts
+database.module.ts
+
+
+modulespapka ichidagi papkalar
+atraction
+auth
+shu qisimni yozish kerak!!!!!!
+
+
+booking
+event
+guide
+hotel
+logger
+museum
+profile
+restaurant
+revive
+transport
+utilespapka ichidagi file
+email.sendler.ts
+otp-generator.ts
