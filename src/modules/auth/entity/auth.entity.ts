@@ -2,6 +2,7 @@ import { UserRole } from 'src/common/enum/user-role.enum';
 import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import {
   Entity,
@@ -43,10 +44,13 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
-  
+
   // Profile bilan bog'liqlik saqlanib qoladi
   // @OneToOne(() => Profile, (profile) => profile.user, { cascade: true, onDelete: "CASCADE" })
   // profile: Profile;
 
+  // User Entity ichida
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
+  restaurants: Restaurant[];
   // ── Timestamps ─────────────────────────────────────────────────────────
 }
