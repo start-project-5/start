@@ -5,21 +5,32 @@ import { LoggerService } from '../modules/logger/logger.service';
 
 @Injectable()
 export class EmailSender {
+  sendOtp(email: string, otp: string, arg2: string) {
+      throw new Error('Method not implemented.');
+  }
   private transporter: nodemailer.Transporter;  
  
-  
+
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
   ) {
+
+     const host = this.configService.get('mail.host');
+  const port = this.configService.get('mail.port');
+  const user = this.configService.get('mail.user');
+
+   console.log('=== MAIL CONFIG ===', { host, port, user });
+
     this.transporter = nodemailer.createTransport({
       host: this.configService.get('mail.host'),
       port: this.configService.get<number>('mail.port'),
       secure: false,
       auth: {
+        
         user: this.configService.get('mail.user'),
-        pass: this.configService.get('mail.password'),
-      },
+        pass: this.configService.get('mail.pass'),
+      },  
     });
   }
 
@@ -43,6 +54,7 @@ export class EmailSender {
       throw err;
     }
   }
+  
 
   private buildOtpTemplate(otp: string): string {
     return `

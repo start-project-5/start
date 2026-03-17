@@ -1,9 +1,10 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { BaseEntity } from 'src/database/base.entity';
-import { User } from 'src/modules/auth/entity/auth.entity';
+// import { User } from 'src/modules/auth/user/entity/auth.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import { IsDateString, IsEnum, IsNumber, Min } from 'class-validator';
 import { BookingStatus } from 'src/common/enum/booking-status.enum';
+import { User } from 'src/modules/auth/user/user.entity';
 
 @Entity('bookings')
 @Unique(['guide', 'date']) // Senior darajadagi himoya: Bir gid bitta sanada faqat bir marta bron qilinishi mumkin
