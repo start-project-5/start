@@ -12,9 +12,10 @@ import {
   Max,
   Min,
   IsObject,
+  ValidateNested,
 } from 'class-validator';
-import { string } from 'joi';
 import { PriceRange } from 'src/common/enum/restaurant_price.enum';
+import { WorkingHoursDto } from './workingHours.dto';
 
 export class CreateRestaurantDto {
   @ApiProperty({
@@ -71,30 +72,57 @@ export class CreateRestaurantDto {
   @Type(() => Number)
   rating?: number;
 
-  @ApiPropertyOptional({ example: { mon: '09:00-22:00' } })
-  @IsOptional() // <--- BU JUDA MUHIM! Commentdan chiqaring
-  @IsObject()
+  // @ApiPropertyOptional({ example: { mon: '09:00-22:00' } })
+  // @IsOptional() // <--- BU JUDA MUHIM! Commentdan chiqaring
+  // @IsObject()
+  // @Transform(({ value }) => {
+  //   if (!value || value === '') return undefined;
+  //   if (typeof value !== 'string') return value;
+
+  //   try {
+  //     return JSON.parse(value);
+  //   } catch (e) {
+  //     return value;
+  //   }
+  // })
+  // workingHours?: object;
+
+  @ApiPropertyOptional({ type: WorkingHoursDto })
+  @IsOptional()
   @Transform(({ value }) => {
-    if (!value || value === '') return undefined;
-    if (typeof value !== 'string') return value;
+    // 1. Bo'sh qiymatlarni qayta ishlash
+    if (!value || value === '' || value === 'null') return undefined;
 
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      return value;
+    // 2. Agar string bo'lib kelsa (Multipart/Form-data holati)
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+
+        // MUHIM: Oddiy obyektni WorkingHoursDto klassiga aylantiramiz
+        // Bu validatorga "bu begona emas, bizning klass" deb aytadi
+        const dtoInstance = new WorkingHoursDto();
+        Object.assign(dtoInstance, parsed);
+        return dtoInstance;
+      } catch (e) {
+        return value; // JSON noto'g'ri bo'lsa, validator (IsObject) ushlaydi
+      }
     }
+    return value;
   })
-  workingHours?: object;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => WorkingHoursDto)
+  workingHours?: WorkingHoursDto;
 
-@ApiPropertyOptional({ default: true })
+  @ApiPropertyOptional({ default: true })
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => {
     if (value === 'true' || value === true) return true;
     if (value === 'false' || value === false) return false;
-    
+
     if (value === '' || value === null || value === undefined) return undefined;
-    
+
     return value;
   })
   isBookingAvailable?: boolean;

@@ -12,6 +12,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateRestaurantSwaggerDto } from './dto/restaurant-swagger-image.dto';
+import { FilterRestaurantDto } from './dto/query.dto';
 
 @ApiTags('restaurant')
 @ApiInternalServerErrorResponse({ description: 'Internal server error' })
@@ -39,10 +40,17 @@ export class RestaurantController {
 
   @ApiOperation({ description: "Get restaurant api (public)" })
   @ApiOkResponse({ description: "Restaurants" })
+  @ApiOperation({ summary: 'List jobs with filters, search, pagination' })
   @Get("all_restaurants")
-  getAllRestaurant() {
-    return this.restaurantService.getAllRestaurant()
+  getAllRestaurant(@Query() filter: FilterRestaurantDto) {
+    return this.restaurantService.getAllRestaurant(filter)
   }
 
-
+  
+  @ApiOperation({ description: "Deleted all restaurant api (private)" })
+  @ApiOkResponse({ description: "Deleted All" })
+  @Get("delete_all")
+  deleteAllResturant() {
+    return this.restaurantService.deleteAllResturant()
+  }
 }

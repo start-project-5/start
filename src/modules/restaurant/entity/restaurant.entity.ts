@@ -20,6 +20,7 @@ import {
 } from 'class-validator';
 import { PriceRange } from 'src/common/enum/restaurant_price.enum';
 import { User } from 'src/modules/auth/entity/auth.entity';
+import { WorkingHoursDto } from '../dto/workingHours.dto';
 
 @Entity('restaurants')
 export class Restaurant extends BaseEntity {
@@ -81,18 +82,18 @@ export class Restaurant extends BaseEntity {
   // reviewsCount: string;
 
   @Column({
-    type: 'jsonb',
-    nullable: true,
-    comment: 'Ish vaqti: {"mon": "09:00-22:00", "sun": "yopiq"}',
-  })
-  workingHours: object;
-
-  @Column({
     type: 'boolean',
     default: true,
     comment: 'Bron qilish imkoniyati bormi?',
   })
   isBookingAvailable: boolean;
+
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+    comment: 'Ish vaqti: {"monday": "09:00-22:00", "sunday": "yopiq"}',
+  })
+  workingHours: object; // 'object' o'rniga aniq klass nomi
 
   // -----------------------relation
 
