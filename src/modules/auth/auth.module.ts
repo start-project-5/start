@@ -13,9 +13,9 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 // import { RolesGuard } from './guards/roles.guard';
 import { User } from './user/user.entity';
 import { EmailSender } from '../../utils/email-sender';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { RolesGuard } from './guards/roles.guard';
 import { UserController } from './user/user.controller';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 
 @Module({
   imports: [

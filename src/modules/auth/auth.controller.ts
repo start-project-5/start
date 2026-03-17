@@ -28,7 +28,7 @@ import { Public } from '../../common/decorators/public.decorator';
 import { User } from './user/user.entity';
 import { SignInDto } from './dto/sign-in-dto';
 import { ResetPasswordDto } from './dto/rest-password.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -39,7 +39,7 @@ export class AuthController {
   @Public()
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Yangi foydalanuvchi ro\'yxatdan o\'tkazish' })
+  @ApiOperation({ summary: "Yangi foydalanuvchi ro'yxatdan o'tkazish" })
   @ApiResponse({ status: 201, description: 'OTP emailga yuborildi' })
   @ApiResponse({ status: 400, description: 'Email band' })
   signUp(@Body() dto: CreateUserDto): Promise<{ message: string }> {
@@ -52,7 +52,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Email tasdiqlash (OTP orqali)' })
   @ApiResponse({ status: 200, description: 'Email tasdiqlandi' })
-  @ApiResponse({ status: 400, description: 'OTP noto\'g\'ri yoki muddati o\'tgan' })
+  @ApiResponse({
+    status: 400,
+    description: "OTP noto'g'ri yoki muddati o'tgan",
+  })
   verifyEmail(@Body() dto: VerifyOtpDto): Promise<{ message: string }> {
     return this.authService.verifyEmail(dto);
   }
@@ -62,9 +65,15 @@ export class AuthController {
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Tizimga kirish' })
-  @ApiResponse({ status: 200, description: 'Access va refresh token qaytariladi' })
-  @ApiResponse({ status: 401, description: 'Noto\'g\'ri ma\'lumotlar' })
-  @ApiResponse({ status: 403, description: 'Email tasdiqlanmagan / Hisob bloklangan' })
+  @ApiResponse({
+    status: 200,
+    description: 'Access va refresh token qaytariladi',
+  })
+  @ApiResponse({ status: 401, description: "Noto'g'ri ma'lumotlar" })
+  @ApiResponse({
+    status: 403,
+    description: 'Email tasdiqlanmagan / Hisob bloklangan',
+  })
   signIn(@Body() dto: SignInDto): Promise<AuthTokens> {
     return this.authService.signIn(dto);
   }
@@ -75,9 +84,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Parolni tiklash uchun OTP yuborish' })
   @ApiResponse({ status: 200, description: 'OTP emailga yuborildi' })
-  forgotPassword(
-    @Body() dto: ForgotPasswordDto,
-  ): Promise<{ message: string }> {
+  forgotPassword(@Body() dto: ForgotPasswordDto): Promise<{ message: string }> {
     return this.authService.forgotPassword(dto);
   }
 
@@ -85,9 +92,12 @@ export class AuthController {
   @Public()
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'OTP orqali yangi parol o\'rnatish' })
+  @ApiOperation({ summary: "OTP orqali yangi parol o'rnatish" })
   @ApiResponse({ status: 200, description: 'Parol yangilandi' })
-  @ApiResponse({ status: 400, description: 'OTP noto\'g\'ri yoki muddati o\'tgan' })
+  @ApiResponse({
+    status: 400,
+    description: "OTP noto'g'ri yoki muddati o'tgan",
+  })
   resetPassword(@Body() dto: ResetPasswordDto): Promise<{ message: string }> {
     return this.authService.resetPassword(dto);
   }
@@ -108,7 +118,7 @@ export class AuthController {
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth('access-token')
-  @ApiOperation({ summary: 'Tizimdan chiqish (refresh token o\'chiriladi)' })
+  @ApiOperation({ summary: "Tizimdan chiqish (refresh token o'chiriladi)" })
   @ApiResponse({ status: 200, description: 'Chiqildi' })
   @ApiResponse({ status: 401, description: 'Avtorizatsiya kerak' })
   logout(@Req() req: Request & { user: User }): Promise<{ message: string }> {

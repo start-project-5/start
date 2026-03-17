@@ -15,13 +15,13 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import { UserRole } from '../../../common/enum/user-role.enum';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 // import { UpdateUserDto } from './dto/update-users.dto';
 
 @ApiTags('Users')
