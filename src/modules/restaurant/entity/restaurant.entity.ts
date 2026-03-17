@@ -1,44 +1,106 @@
-import { BaseEntity } from 'src/database/base.entity';
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   Index,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { BaseEntity } from 'src/database/base.entity';
+import {
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  IsOptional,
+  IsLatitude,
+  IsLongitude,
+  IsEnum,
+  Min,
+  Max,
+} from 'class-validator';
+import { PriceRange } from 'src/common/enum/restaurant_price.enum';
+import { User } from 'src/modules/auth/entity/auth.entity';
+import { WorkingHoursDto } from '../dto/workingHours.dto';
 
-/**
- * Restaurant — a dining place in the city.
- *
- * This platform serves one city only, so there is no city relation.
- * Location is stored directly as address + coordinates.
- */
 @Entity('restaurants')
 export class Restaurant extends BaseEntity {
-  @Column({ length: 150 })
+  @Index({ fulltext: true })
+  @Column({ type: 'varchar', length: 150, comment: 'Restoran nomi' })
+  @IsNotEmpty()
   name: string;
 
-  @Column({ type: 'text' })
+  @Column({
+    type: 'text',
+    comment: 'Restoran tavsifi va menyu haqida qisqacha',
+  })
+  @IsNotEmpty()
   description: string;
 
-  @Column({ length: 255 })
+  @Column({
+    type: 'enum',
+    enum: PriceRange,
+    default: PriceRange.MODERATE,
+    comment: 'Narx toifasi',
+  })
+  @IsEnum(PriceRange)
+  priceRange: PriceRange;
+
+  @Column({ type: 'varchar', length: 255, comment: 'Aniq manzil' })
   address: string;
 
-  /** GPS latitude — e.g. 41.299496 */
-  @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true })
-  latitude: number;
+  // Geolokatsiya uchun Index qo'shish qidiruvni tezlashtiradi
+  @Index()
+  @Column({ type: 'decimal', precision: 10, scale: 8, nullable: true })
+  @IsOptional()
+  @IsLatitude()
+  latitude: string;
 
-  /** GPS longitude — e.g. 69.240073 */
-  @Column({ type: 'decimal', precision: 10, scale: 7, nullable: true })
-  longitude: number;
+  @Index()
+  @Column({ type: 'decimal', precision: 11, scale: 8, nullable: true })
+  @IsOptional()
+  @IsLongitude()
+  longitude: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true, comment: 'Asosiy rasm' })
+  @IsOptional()
+  @IsUrl()
   image: string;
 
   @Index()
-  @Column({ type: 'decimal', precision: 3, scale: 1, default: 0.0 })
+  @Column({
+    type: 'decimal',
+    precision: 3,
+    scale: 1,
+    default: 0.0,
+    comment: 'Reyting (0.0 - 5.0)',
+  })
+  @Min(0)
+  @Max(5)
   rating: number;
 
-  // ── Timestamps ─────────────────────────────────────────────────────────
+  // @Column({ type: 'varchar', nullable: true, comment: 'joylar soni' })
+  // reviewsCount: string;
+
+  @Column({
+    type: 'boolean',
+    default: true,
+    comment: 'Bron qilish imkoniyati bormi?',
+  })
+  isBookingAvailable: boolean;
+
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+    comment: 'Ish vaqti: {"monday": "09:00-22:00", "sunday": "yopiq"}',
+  })
+  workingHours: object; // 'object' o'rniga aniq klass nomi
+
+  // -----------------------relation
+
+  // @ManyToOne(() => User, (user) => user.restaurants, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
+  // @JoinColumn({ name: 'user_id' })
+  // user: User;
 }
