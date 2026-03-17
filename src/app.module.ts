@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './config/db-config';
 import { LoggerModule } from './modules/logger/logger.module';
+
+import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 /**
@@ -31,6 +33,7 @@ import { AuthModule } from './modules/auth/auth.module';
     // 3. Feature modules
     // UsersModule,
     LoggerModule,
+    RestaurantModule,
     AuthModule
   ],
 })
