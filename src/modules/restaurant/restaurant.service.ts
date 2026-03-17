@@ -14,7 +14,7 @@ export class RestaurantService {
   async addHotel(
     createRestaurantDto: CreateRestaurantDto,
     file: Express.Multer.File,
-    UserId: string,
+    // UserId: string,
   ): Promise<Restaurant> {
     try {
       const {
@@ -28,6 +28,7 @@ export class RestaurantService {
         workingHours,
         isBookingAvailable,
       } = createRestaurantDto;
+
       const restaurant = await this.restaurantRepo.create({
         name,
         description,
@@ -38,13 +39,27 @@ export class RestaurantService {
         rating,
         workingHours,
         isBookingAvailable,
-        user: { id: UserId },
+        image: file?.filename ?? null,
+        // user: { id: UserId },
       });
 
-      restaurant.image = `http://localhost:4036/uploads/${file.filename}`;
+    //   if (file) {
+    //     restaurant.image = `${file.filename}`;
+    //   }
+
       return await this.restaurantRepo.save(restaurant);
     } catch (error) {
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  async getAllRestaurant() {
+    try {
+        const reataurnt = await this.restaurantRepo.find()
+
+        return reataurnt
+    } catch (error) {
+        throw new InternalServerErrorException(error.message)
     }
   }
 }

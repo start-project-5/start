@@ -8,5 +8,5 @@ export class CreateRestaurantSwaggerDto extends CreateRestaurantDto {
     description: 'Restaurant uchun rasm fayli (jpg, png)',
     required: false, // Odatda restaurant yangilaganda rasm yuborish majburiy emas
   })
-  file?: any; 
+  declare file?: any; 
 }

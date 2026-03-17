@@ -35,13 +35,6 @@ export class Restaurant extends BaseEntity {
   @IsNotEmpty()
   description: string;
 
-  // @Column({
-  //   type: 'jsonb',
-  //   default: [],
-  //   comment: 'Oshxona turlari: ["Milliy", "Italiyan", "Sushi"]'
-  // })
-  // cuisines: string[];
-
   @Column({
     type: 'enum',
     enum: PriceRange,
@@ -103,10 +96,10 @@ export class Restaurant extends BaseEntity {
 
   // -----------------------relation
 
-  @ManyToOne(() => User, (user) => user.restaurants, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  // @ManyToOne(() => User, (user) => user.restaurants, {
+  //   onDelete: 'CASCADE',
+  //   onUpdate: 'CASCADE',
+  // })
+  // @JoinColumn({ name: 'user_id' })
+  // user: User;
 }

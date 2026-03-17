@@ -50,7 +50,6 @@ export class User extends BaseEntity {
   // profile: Profile;
 
   // User Entity ichida
-  @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
-  restaurants: Restaurant[];
-  // ── Timestamps ─────────────────────────────────────────────────────────
+  // @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
+  // restaurants: Restaurant[];
 }
