@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/database/base.entity';
-import { User } from 'src/modules/auth/entity/auth.entity';
+import { User } from 'src/modules/auth/user/user.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import {
   Entity,

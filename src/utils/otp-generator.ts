@@ -1,16 +1,20 @@
 import { randomInt } from 'crypto';
 
 /**
- * Generates a cryptographically random 6-digit OTP string.
+ * kod yaratdai 6 honali.
  */
 export function generateOtp(): string {
-  // randomInt(min, max) — max is exclusive, so 100000–999999 covers all 6-digit codes
+  // 100000 - 999999
   return randomInt(100_000, 1_000_000).toString();
 }
 
-/** OTP expiry in milliseconds — 4 minutes */
+/** otp amal qilish vaqti*/
 export const OTP_EXPIRES_MS = 5 * 60 * 1000;
 
+/**
+ * OTP muddati o'tganligini tekshirish.
+ */
 export function isOtpExpired(otpCreatedAt: Date): boolean {
-  return Date.now() - new Date(otpCreatedAt).getTime() > OTP_EXPIRES_MS;
+  const diff = Date.now() - new Date(otpCreatedAt).getTime();
+  return diff > OTP_EXPIRES_MS;
 }
