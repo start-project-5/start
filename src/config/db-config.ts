@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Attraction } from 'src/modules/attraction/entity/attraction.entity';
+import { User } from 'src/modules/auth/user/user.entity';
 
 // ── Entities ──────────────────────────────────────────────────────────────
 // Every entity must be listed here so TypeORM knows which tables to manage.
 
-import { User } from 'src/modules/auth/entity/auth.entity';
+// import { User } from 'src/modules/auth/user/user/entity/auth.entity';
+
 import { Booking } from 'src/modules/booking/entity/booking.entity';
 import { Event } from 'src/modules/event/entity/event.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';

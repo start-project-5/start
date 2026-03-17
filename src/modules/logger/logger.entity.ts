@@ -1,7 +1,8 @@
 import { BaseEntity } from 'src/database/base.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../auth/entity/auth.entity';
+// import { User } from '../auth/user/entity/auth.entity';
 import { LogLevel } from 'src/common/enum/logger-level.enum';
+import { User } from '../auth/user/user.entity';
 
 @Entity('logs')
 export class Log extends BaseEntity {

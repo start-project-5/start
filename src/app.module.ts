@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfig } from './config/db-config';
 import { LoggerModule } from './modules/logger/logger.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 /**
  * AppModule — the root module of the application.
@@ -30,6 +31,7 @@ import { LoggerModule } from './modules/logger/logger.module';
     // 3. Feature modules
     // UsersModule,
     LoggerModule,
+    AuthModule
   ],
 })
 export class AppModule {}
