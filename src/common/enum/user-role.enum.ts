@@ -7,17 +7,17 @@
  */
 export enum UserRole {
   // obichnioy user
-  TOURIST = 'tourist',
+  TOURIST = 0,
 
   // hotel, restaran, event qo'shib bilado'n odam
-  BUSINESS_OWNER = 'business_owner',
+  BUSINESS_OWNER = 1,
 
   // gid
-  GUIDE = 'guide',
+  GUIDE = 2,
 
   // admin
-  ADMIN = 'admin',
+  ADMIN = 3,
 
   // superadmin
-  SUPERADMIN = 'superadmin',
+  SUPERADMIN = 4,
 }

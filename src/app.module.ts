@@ -6,6 +6,8 @@ import { LoggerModule } from './modules/logger/logger.module';
 
 import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { GuideModule } from './modules/guide/guide.module';
+import { EventModule } from './modules/event/event.module';
 
 /**
  * AppModule — the root module of the application.
@@ -28,13 +30,13 @@ import { AuthModule } from './modules/auth/auth.module';
       useClass: DatabaseConfig,
     }),
 
-    
-
     // 3. Feature modules
     // UsersModule,
     LoggerModule,
     RestaurantModule,
-    AuthModule
+    AuthModule,
+    GuideModule,
+    EventModule,
   ],
 })
 export class AppModule {}
