@@ -1,41 +1,51 @@
-// src/modules/auth/guards/roles.guard.ts
-import {
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common'; 
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from 'src/common/enum/user-role.enum';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { User } from 'src/modules/auth/user/user.entity';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { UserRole } from '../enum/user-role.enum';
+import { MIN_ROLE_KEY } from '../decorators/min-role.decorator';
 
+/**
+ * HierarchicalRolesGuard
+ *
+ * Instead of checking exact role equality, compares numeric weights:
+ *   user.role >= requiredRole
+ *
+ * Benefits:
+ *   - Adding a new role never requires touching controllers
+ *   - SUPERADMIN (4) automatically passes every check
+ *   - One decorator @MinRole(UserRole.ADMIN) instead of
+ *     @Roles(UserRole.ADMIN, UserRole.SUPERADMIN)
+ *
+ * Usage in controller:
+ *   @MinRole(UserRole.ADMIN)   → ADMIN + SUPERADMIN
+ *   @MinRole(UserRole.GUIDE)   → GUIDE + ADMIN + SUPERADMIN
+ *   @MinRole(UserRole.TOURIST) → everyone authenticated
+ */
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  /** Foydalanuvchi roliga qarab endpointga ruxsat tekshirish */
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
+    // @Public() skips all auth checks
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) return true;
+
+    // Get minimum required role from @MinRole() decorator
+    const requiredRole = this.reflector.getAllAndOverride<UserRole>(MIN_ROLE_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    if (!requiredRoles || requiredRoles.length === 0) return true;
+    // No @MinRole() = any authenticated user can access
+    if (requiredRole === undefined || requiredRole === null) return true;
 
-    const { user }: { user: User } = context.switchToHttp().getRequest();
+    const { user } = context.switchToHttp().getRequest();
+    if (!user) return false;
 
-    if (!user) {
-      throw new ForbiddenException('Foydalanuvchi aniqlanmadi');
-    }
-
-    const hasRole = requiredRoles.includes(user.role);
-    if (!hasRole) {
-      throw new ForbiddenException(
-        `Bu amalni bajarish uchun ${requiredRoles.join(' yoki ')} roli kerak`,
-      );
-    }
-
-    return true;
+    // The magic: numeric comparison instead of equality check
+    return user.role >= requiredRole;
   }
 }

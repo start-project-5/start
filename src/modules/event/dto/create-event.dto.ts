@@ -37,13 +37,13 @@ export class CreateEventDto {
   @IsOptional()
   @IsLatitude()
   @Type(() => Number)
-  latitude?: number;
+  latitude?: string;
 
   @ApiPropertyOptional({ example: 60.3639, description: 'Uzunlik (Longitude)' })
   @IsOptional()
   @IsLongitude()
   @Type(() => Number)
-  longitude?: number;
+  longitude?: string;
 
   @ApiProperty({ example: '2026-03-20T10:00:00Z', description: 'Boshlanish vaqti' })
   @IsDate()
