@@ -18,32 +18,34 @@ import { PriceRange } from 'src/common/enum/restaurant_price.enum';
 import { WorkingHoursDto } from './workingHours.dto';
 
 export class CreateRestaurantDto {
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: 'Rayhon Milliy Taomlari',
     description: 'Restoran nomi',
   })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({message: "Restoran nomi bo'lishi shart"})
   name: string;
 
-  @ApiPropertyOptional({
-    example: 'Eng mazali milliy taomlar va shashliklar...',
-    description: 'Restoran tavsifi',
-  })
+  @ApiPropertyOptional({ example: 'Eng mazali milliy taomlar...' })
   @IsString()
-  @IsOptional()
+  @IsNotEmpty({ message: 'Tavsif bo\'sh bo\'lmasligi kerak' })  // ← majburiy
+  @Transform(({ value }) => {
+    if (value === '' || value === null || value === undefined) return undefined;
+    return value;
+  })
   description: string;
 
   @ApiProperty({ enum: PriceRange, default: PriceRange.MODERATE })
   @IsEnum(PriceRange)
   priceRange: PriceRange;
 
-  @ApiProperty({
-    example: "Toshkent sh., Lutfiy ko'chasi, 14-uy",
-    description: 'Manzil',
-  })
+  @ApiPropertyOptional({ example: "Toshkent sh., Lutfiy ko'chasi, 14-uy" })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({message: "Qayerdaligini ko'rsatib keting"})
+  @Transform(({ value }) => {
+    if (value === '' || value === null || value === undefined) return undefined;
+    return value;
+  })
   address: string;
 
   @ApiPropertyOptional({ example: 41.2858, description: 'Latitude' })

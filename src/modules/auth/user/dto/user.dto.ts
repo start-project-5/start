@@ -23,7 +23,7 @@ export class CreateUserDto {
   name: string;
 
   @ApiProperty({
-    example: 'john@example.com',
+    example: 'assomad377@gmail.com',
     description: "Foydalanuvchi elektron manzili (unikal bo'lishi kerak)",
   })
   @IsNotEmpty()
