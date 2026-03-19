@@ -1,0 +1,2 @@
+// restaurant.controllerda create bo'limini Turist qo'shib biladi hozircha. Ro'lni almashtirish kerak Biznesownerga
+// restaurant.controllerda deleteAll bo'limini Turist darajsida ham o'chirsa bo'lodi. Ro'lni almashtirish kerak superadminga

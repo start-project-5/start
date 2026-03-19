@@ -19,8 +19,8 @@ import {
   Max,
 } from 'class-validator';
 import { PriceRange } from 'src/common/enum/restaurant_price.enum';
-import { User } from 'src/modules/auth/entity/auth.entity';
 import { WorkingHoursDto } from '../dto/workingHours.dto';
+import { User } from 'src/modules/auth/user/user.entity';
 
 @Entity('restaurants')
 export class Restaurant extends BaseEntity {
@@ -97,10 +97,10 @@ export class Restaurant extends BaseEntity {
 
   // -----------------------relation
 
-  // @ManyToOne(() => User, (user) => user.restaurants, {
-  //   onDelete: 'CASCADE',
-  //   onUpdate: 'CASCADE',
-  // })
-  // @JoinColumn({ name: 'user_id' })
-  // user: User;
+  @ManyToOne(() => User, (user) => user.restaurants, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }

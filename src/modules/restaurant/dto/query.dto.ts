@@ -26,7 +26,7 @@ export class FilterRestaurantDto extends PaginationDto {
   @IsString()
   address?: string;
 
-  @ApiPropertyOptional({ description: 'Shahar yoki manzil boʻyicha filtr' })
+  @ApiPropertyOptional({ description: 'Buyurtma olish olmasligiga qarab qidiruv' })
   @IsOptional()
   isBookingAvailable?: boolean
 }

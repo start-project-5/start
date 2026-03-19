@@ -121,9 +121,9 @@ export class AuthService {
   async signIn(dto: SignInDto): Promise<AuthTokens> {
     // Password + refreshToken ni select qilib topish
     const user = await this.userService.findByEmailWithPassword(dto.email);
-
-    console.log('User topildi:', user ? 'HA' : 'YOQ');
-
+    
+    // console.log('User topildi:', user ? 'HA' : 'YOQ');
+    
     if (!user) {
       // Xavfsizlik: "email yoki parol noto'g'ri" deb xabar berish
       throw new UnauthorizedException('Email yoki parol noto\'g\'ri');

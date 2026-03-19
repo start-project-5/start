@@ -3,6 +3,7 @@ import { UserRole } from 'src/common/enum/user-role.enum';
 import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
+import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 // import { BaseEntity } from '../../../database/base.entity';
@@ -57,8 +58,6 @@ export class User extends BaseEntity {
 
   // ─── MAVJUD RELATIONS (o'zgarishsiz) ─────────────────────────
 
-
-  
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
   @OneToMany(() => Review, (review) => review.user)
@@ -66,4 +65,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
+  
+  // User Entity ichida
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
+  restaurants: Restaurant[];
 }
