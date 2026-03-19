@@ -24,3 +24,9 @@ export class InvalidImageException
     super("Rasm formati noto'g'ri yoki hajmi katta");
   }
 }
+
+export class RestaurantHasNoImageException extends BadRequestException {
+  constructor() {
+    super('Restoranda rasm mavjud emas');
+  }
+}

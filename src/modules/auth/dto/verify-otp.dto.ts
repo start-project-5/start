@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Length } from 'class-validator';
 
 export class VerifyOtpDto {
-  @ApiProperty({ example: 'ali@example.com' })
+  @ApiProperty({ example: 'assomad377@gmail.com qudratrazzoqov377@gmail.com' })
   @IsEmail()
   email: string;
 

@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as express from "express";
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -63,6 +64,7 @@ async function bootstrap() {
   });
 
   app.use("/uploads", express.static("uploads"));
+  // app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
