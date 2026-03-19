@@ -1,0 +1,1 @@
+// restaurant.controllerda create bo'limini Turist qo'shib biladi hozircha. Ro'lni almashtirish kerak

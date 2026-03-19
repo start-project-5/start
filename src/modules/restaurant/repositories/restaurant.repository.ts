@@ -7,9 +7,6 @@ import { paginate, PaginatedResult, SortOrder } from 'src/utils/pagination';
 
 @Injectable()
 export class RestaurantRepository {
-  findAll() {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(Restaurant)
     private readonly repo: Repository<Restaurant>,
@@ -23,6 +20,7 @@ export class RestaurantRepository {
       limit = 10,
       order = SortOrder.DESC,
       search,
+      address,
       priceRange,
       minRating,
       isBookingAvailable,
@@ -32,7 +30,7 @@ export class RestaurantRepository {
     const qb = this.repo
       .createQueryBuilder('restaurant')
       // Agar relationlar bo'lsa, ularni ham qo'shish mumkin
-      // .leftJoinAndSelect('restaurant.user', 'user')
+      .leftJoinAndSelect('restaurant.user', 'user')
       .where('1=1'); // Dinamik shartlarni oson qo'shish uchun boshlang'ich nuqta
 
     // ── Nomi yoki tavsifi bo'yicha qidiruv ──
@@ -57,6 +55,12 @@ export class RestaurantRepository {
     if (isBookingAvailable !== undefined) {
       qb.andWhere('restaurant.isBookingAvailable = :isBookingAvailable', {
         isBookingAvailable,
+      });
+    }
+   
+    if (address) {
+      qb.andWhere('restaurant.address ILIKE :address', {
+        address: `%${address}%`,   // ← ILIKE + % aniqroq qidiradi
       });
     }
 

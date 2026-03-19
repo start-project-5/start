@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/restaurant.dto';
 import { FilterRestaurantDto } from './dto/query.dto';
 import { RestaurantRepository } from './repositories/restaurant.repository';
+import { User } from '../auth/user/user.entity';
 
 @Injectable()
 export class RestaurantService {
@@ -15,14 +16,15 @@ export class RestaurantService {
   async addHotel(
     createRestaurantDto: CreateRestaurantDto,
     file: Express.Multer.File,
-    // UserId: string,
+    UserId: string,
   ): Promise<Restaurant> {
     try {
 
       const restaurant = await this.restaurantRepo.create({
         ...createRestaurantDto,
         image: file?.filename ?? null,
-        // user: { id: UserId },
+        // user: UserId
+        user: { id: UserId } as User,
       });
 
       return await this.restaurantRepo.save(restaurant);
