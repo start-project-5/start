@@ -69,7 +69,7 @@ export class Restaurant extends BaseEntity {
   @Index()
   @Column({
     type: 'decimal',
-    precision: 3,
+    precision: 2, // Faqat 2 ta raqam (masalan, 4.5 yoki 5.0)
     scale: 1,
     default: 0.0,
     comment: 'Reyting (0.0 - 5.0)',

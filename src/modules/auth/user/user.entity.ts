@@ -2,6 +2,7 @@
 import { UserRole } from 'src/common/enum/user-role.enum';
 import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
@@ -60,6 +61,7 @@ export class User extends BaseEntity {
 
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
+
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
 
@@ -69,4 +71,7 @@ export class User extends BaseEntity {
   // User Entity ichida
   @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
   restaurants: Restaurant[];
+  
+  @OneToMany(() => Hotel, (hotel) => hotel.user, {cascade: true})
+  hotels: Hotel[];
 }
