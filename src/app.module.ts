@@ -8,6 +8,7 @@ import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GuideModule } from './modules/guide/guide.module';
 import { EventModule } from './modules/event/event.module';
+import { AttractionModule } from './modules/attraction/attraction.module';
 
 /**
  * AppModule — the root module of the application.
@@ -37,6 +38,7 @@ import { EventModule } from './modules/event/event.module';
     AuthModule,
     GuideModule,
     EventModule,
+    AttractionModule,
   ],
 })
 export class AppModule {}
