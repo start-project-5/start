@@ -2,14 +2,13 @@ import {
   Entity,
   Column,
   Index,
-  OneToOne,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { BaseEntity } from 'src/database/base.entity';
 import {
   IsNotEmpty,
-  IsString,
   IsUrl,
   IsOptional,
   IsLatitude,
@@ -19,8 +18,8 @@ import {
   Max,
 } from 'class-validator';
 import { PriceRange } from 'src/common/enum/restaurant_price.enum';
-import { WorkingHoursDto } from '../dto/workingHours.dto';
 import { User } from 'src/modules/auth/user/user.entity';
+import { RestaurantMenuItem } from 'src/modules/menu-item/entities/menu-item.entity';
 
 @Entity('restaurants')
 export class Restaurant extends BaseEntity {
@@ -69,7 +68,7 @@ export class Restaurant extends BaseEntity {
   @Index()
   @Column({
     type: 'decimal',
-    precision: 3,
+    precision: 2, // Faqat 2 ta raqam (masalan, 4.5 yoki 5.0)
     scale: 1,
     default: 0.0,
     comment: 'Reyting (0.0 - 5.0)',
@@ -103,4 +102,7 @@ export class Restaurant extends BaseEntity {
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => RestaurantMenuItem, (item) => item.restaurant)
+  menuItems: RestaurantMenuItem[];
 }

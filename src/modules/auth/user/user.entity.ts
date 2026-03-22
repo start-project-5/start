@@ -2,6 +2,8 @@
 import { UserRole } from 'src/common/enum/user-role.enum';
 import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
+import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
+import { MenuCatalog } from 'src/modules/menu-catalog/entities/menu-catalog.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
@@ -20,8 +22,6 @@ export class User extends BaseEntity {
 
   @Column({ type: 'varchar', unique: true })
   email: string;
-
-
 
   /** Bcrypt bilan hash qilingan parol — select:false (query da avtomatik chiqmaydi) */
   @Column({ type: 'varchar', select: false })
@@ -60,13 +60,22 @@ export class User extends BaseEntity {
 
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
+
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
 
   @OneToMany(() => Booking, (booking) => booking.user)
   bookings: Booking[];
-  
+
   // User Entity ichida
-  @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {cascade: true})
+  @OneToMany(() => Restaurant, (restaurant) => restaurant.user, {
+    cascade: true,
+  })
   restaurants: Restaurant[];
+
+  @OneToMany(() => Hotel, (hotel) => hotel.user, { cascade: true })
+  hotels: Hotel[];
+
+  @OneToMany(() => MenuCatalog, (item) => item.user)
+  menuItems: MenuCatalog[];
 }
