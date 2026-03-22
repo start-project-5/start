@@ -8,7 +8,11 @@ import { RestaurantModule } from './modules/restaurant/restaurant.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GuideModule } from './modules/guide/guide.module';
 import { EventModule } from './modules/event/event.module';
+import { HotelModule } from './modules/hotel/hotel.module';
 import { AttractionModule } from './modules/attraction/attraction.module';
+import { MenuCatalogModule } from './modules/menu-catalog/menu-catalog.module';
+import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
+
 
 /**
  * AppModule — the root module of the application.
@@ -38,7 +42,10 @@ import { AttractionModule } from './modules/attraction/attraction.module';
     AuthModule,
     GuideModule,
     EventModule,
+    HotelModule,
     AttractionModule,
+    MenuCatalogModule,
+    RestaurantMenuModule,
   ],
 })
 export class AppModule {}

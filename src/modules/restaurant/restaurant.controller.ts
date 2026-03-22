@@ -65,9 +65,6 @@ export class RestaurantController {
     @Body() createRestaurantDto: CreateRestaurantDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // console.log(req);
-  console.log('file:', file);        // ← shu yerda tekshiring
-  console.log('body:', createRestaurantDto);
     return this.restaurantService.addRestaurant(
       createRestaurantDto,
       file,
@@ -94,6 +91,7 @@ export class RestaurantController {
 
   // ─── PATCH /api/restaurant/:id ────────────────────────────────
   @Patch(':id')
+  @UseInterceptors(FileCleanupInterceptor)
   @MinRole(UserRole.TOURIST)
   @HttpCode(HttpStatus.OK)
   @UseFileUpload('file', 'restaurant')
@@ -116,9 +114,10 @@ export class RestaurantController {
 
   // ─── PATCH /api/restaurant/:id/image ─────────────────────────
   @Patch(':id/image')
+  @UseInterceptors(FileCleanupInterceptor)
+  @UseFileUpload('file', 'restaurant')
   @MinRole(UserRole.TOURIST)
   @HttpCode(HttpStatus.OK)
-  @UseFileUpload('file', 'restaurant')
   @ApiOperation({ summary: 'Restoran rasmini yangilash' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({

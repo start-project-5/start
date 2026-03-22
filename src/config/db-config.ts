@@ -14,6 +14,8 @@ import { Event } from 'src/modules/event/entity/event.entity';
 import { Guide } from 'src/modules/guide/entity/guide.entity';
 import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { Log } from 'src/modules/logger/logger.entity';
+import { MenuCatalog } from 'src/modules/menu-catalog/entities/menu-catalog.entity';
+import { RestaurantMenuItem } from 'src/modules/menu-item/entities/menu-item.entity';
 import { Museum } from 'src/modules/museum/entity/museum.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
@@ -54,6 +56,9 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         Transport,
         Profile,
         Log,
+        RestaurantMenuItem,
+        MenuCatalog,
+        RestaurantMenuItem,
       ],
 
       // ⚠️  synchronize:true is fine during development.
