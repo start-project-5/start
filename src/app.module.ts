@@ -10,6 +10,8 @@ import { GuideModule } from './modules/guide/guide.module';
 import { EventModule } from './modules/event/event.module';
 import { HotelModule } from './modules/hotel/hotel.module';
 import { AttractionModule } from './modules/attraction/attraction.module';
+import { MenuCatalogModule } from './modules/menu-catalog/menu-catalog.module';
+import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
 
 
 /**
@@ -42,6 +44,8 @@ import { AttractionModule } from './modules/attraction/attraction.module';
     EventModule,
     HotelModule,
     AttractionModule,
+    MenuCatalogModule,
+    RestaurantMenuModule,
   ],
 })
 export class AppModule {}

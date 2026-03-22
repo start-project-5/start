@@ -115,9 +115,9 @@ export class RestaurantController {
   // ─── PATCH /api/restaurant/:id/image ─────────────────────────
   @Patch(':id/image')
   @UseInterceptors(FileCleanupInterceptor)
+  @UseFileUpload('file', 'restaurant')
   @MinRole(UserRole.TOURIST)
   @HttpCode(HttpStatus.OK)
-  @UseFileUpload('file', 'restaurant')
   @ApiOperation({ summary: 'Restoran rasmini yangilash' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
