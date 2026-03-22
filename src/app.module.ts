@@ -13,7 +13,6 @@ import { AttractionModule } from './modules/attraction/attraction.module';
 import { MenuCatalogModule } from './modules/menu-catalog/menu-catalog.module';
 import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
 
-
 /**
  * AppModule — the root module of the application.
  *
@@ -48,6 +47,4 @@ import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
     RestaurantMenuModule,
   ],
 })
-
-
 export class AppModule {}
