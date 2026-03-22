@@ -48,4 +48,5 @@ import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
     RestaurantMenuModule,
   ],
 })
+
 export class AppModule {}
