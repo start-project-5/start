@@ -185,7 +185,7 @@ export class AuthService {
     const otp = generateOtp();
     await this.userService.saveOtp(user.id, otp);
 
-    await this.emailSender.sendOtp(dto.email, otp, 'Parolni tiklash kodi');
+     this.emailSender.sendOtp(dto.email, otp, 'Parolni tiklash kodi');
 
     return { message: 'Parolni tiklash kodi emailingizga yuborildi.' };
   }

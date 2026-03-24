@@ -26,7 +26,7 @@ export class EmailSender {
       secure: false,
       auth: {
         user: this.configService.get('MAIL_USER'),
-        pass: this.configService.get('MAIL_PASS'),
+        pass: this.configService.get('MAIL_PASSWORD'),
       },
     });
   }
