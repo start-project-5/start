@@ -4,6 +4,7 @@ import { BaseEntity } from 'src/database/base.entity';
 import { Booking } from 'src/modules/booking/entity/booking.entity';
 import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { MenuCatalog } from 'src/modules/menu-catalog/entities/menu-catalog.entity';
+import { Museum } from 'src/modules/museum/entity/museum.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
@@ -78,4 +79,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => MenuCatalog, (item) => item.user)
   menuItems: MenuCatalog[];
+  
+  @OneToMany(() => Museum, (museum) => museum.user, { cascade: true })
+  museums: Museum[];
 }
