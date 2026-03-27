@@ -16,7 +16,11 @@ import { Hotel } from 'src/modules/hotel/entity/hotel.entity';
 import { Log } from 'src/modules/logger/logger.entity';
 import { MenuCatalog } from 'src/modules/menu-catalog/entities/menu-catalog.entity';
 import { RestaurantMenuItem } from 'src/modules/menu-item/entities/menu-item.entity';
+import { Exhibit } from 'src/modules/museum/entity/exhibit.entity';
+import { Favorite } from 'src/modules/museum/entity/favorite.entity';
+import { Gallery } from 'src/modules/museum/entity/gallery.entity';
 import { Museum } from 'src/modules/museum/entity/museum.entity';
+import { Reviews } from 'src/modules/museum/entity/review.entity';
 import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
@@ -59,6 +63,11 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         RestaurantMenuItem,
         MenuCatalog,
         RestaurantMenuItem,
+        Museum,
+        Exhibit,
+        Gallery,
+        Reviews,
+        Favorite
       ],
 
       // ⚠️  synchronize:true is fine during development.
