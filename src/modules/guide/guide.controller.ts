@@ -33,6 +33,8 @@ import { UserRole } from 'src/common/enum/user-role.enum';
 import { UpdateGuideDto } from './dto/update-guide.dto';
 import { GuideService } from './guide.service';
 import { GuideFilterDto } from './dto/guide-filter.dto';
+import { UseFileUpload } from 'src/common/decorators/file-upload.decorator';
+import { FileCleanupInterceptor } from 'src/common/interceptors/file-cleanup.interceptor';
 
 @ApiTags('Guides')
 @ApiBearerAuth('access-token')
@@ -60,7 +62,7 @@ export class GuideController {
   // ── ADMIN+ ────────────────────────────────────────────────────────────────
 
   @Post()
-  @MinRole(UserRole.ADMIN)
+  @MinRole(UserRole.TOURIST)
   @ApiOperation({ summary: '[Admin] Create guide' })
   create(@Body() dto: CreateGuideDto) {
     return this.guideService.create(dto);
@@ -76,14 +78,16 @@ export class GuideController {
   }
 
   @Patch(':id/photo')
-  @MinRole(UserRole.GUIDE)
+  @MinRole(UserRole.TOURIST)
+  // @UseInterceptors(FileCleanupInterceptor) // ← SHU YERDA QO'SHILDI
+  // @UseFileUpload('file', 'guides')
   @UseInterceptors(
     FileInterceptor('photo', {
       storage: diskStorage({
         destination: './uploads/guides',
         filename: (_req, file, cb) => {
           const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-          cb(null, `guide-${unique}${extname(file.originalname)}`);
+          cb(null, `guides-${unique}${extname(file.originalname)}`);
         },
       }),
       fileFilter: (_req, file, cb) => {
