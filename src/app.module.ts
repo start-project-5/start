@@ -14,7 +14,6 @@ import { MenuCatalogModule } from './modules/menu-catalog/menu-catalog.module';
 import { RestaurantMenuModule } from './modules/menu-item/menu-item.module';
 import { MuseumModule } from './modules/museum/museum.module';
 
-
 /**
  * AppModule — the root module of the application.
  *
