@@ -9,6 +9,7 @@ import { Profile } from 'src/modules/profile/entities/profile.entity';
 import { Restaurant } from 'src/modules/restaurant/entity/restaurant.entity';
 import { Review } from 'src/modules/review/entity/review.entity';
 import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { SocialAccount } from './socialAccount.entity';
 // import { BaseEntity } from '../../../database/base.entity';
 // import { Role } from '../../../common/enums/role.enum';
 // import { Review } from '../../review/entities/review.entity';
@@ -59,7 +60,7 @@ export class User extends BaseEntity {
 
   // ─── MAVJUD RELATIONS (o'zgarishsiz) ─────────────────────────
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true, onDelete: "CASCADE" })
   profile: Profile;
 
   @OneToMany(() => Review, (review) => review.user)
@@ -82,4 +83,7 @@ export class User extends BaseEntity {
   
   @OneToMany(() => Museum, (museum) => museum.user, { cascade: true })
   museums: Museum[];
+  
+  @OneToMany(() => SocialAccount, (social) => social.auth, { cascade: true, onDelete: "CASCADE" })
+  socialAccounts: SocialAccount[];
 }

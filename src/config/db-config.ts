@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Attraction } from 'src/modules/attraction/entity/attraction.entity';
+import { SocialAccount } from 'src/modules/auth/user/socialAccount.entity';
 import { User } from 'src/modules/auth/user/user.entity';
 
 // ── Entities ──────────────────────────────────────────────────────────────
@@ -67,7 +68,8 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         Exhibit,
         Gallery,
         Reviews,
-        Favorite
+        Favorite,
+        SocialAccount,
       ],
 
       // ⚠️  synchronize:true is fine during development.

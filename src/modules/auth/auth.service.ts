@@ -1,4 +1,3 @@
-
 import {
   BadRequestException,
   ForbiddenException,
@@ -22,6 +21,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { UserRole } from 'src/common/enum/user-role.enum';
 import { SignInDto } from './dto/sign-in-dto';
 import { ResetPasswordDto } from './dto/rest-password.dto';
+import { UserGoogleService } from './user_google/user_google.service';
 
 // ─── Tip ta'riflar ────────────────────────────────────────────
 
@@ -37,7 +37,10 @@ export interface AuthTokens {
 }
 
 // ─── Rollari admin tasdig'ini talab qiladiganlar ──────────────
-const ROLES_REQUIRING_APPROVAL: UserRole[] = [UserRole.GUIDE,UserRole.BUSINESS_OWNER];
+const ROLES_REQUIRING_APPROVAL: UserRole[] = [
+  UserRole.GUIDE,
+  UserRole.BUSINESS_OWNER,
+];
 
 @Injectable()
 export class AuthService {
@@ -46,6 +49,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailSender: EmailSender,
+    private userGoogleService: UserGoogleService,
   ) {}
 
   // ═══════════════════════════════════════════════════════════════
@@ -57,7 +61,7 @@ export class AuthService {
     // Email band ekanligini tekshirish
     const existing = await this.userService.findByEmail(dto.email);
     if (existing) {
-      throw new BadRequestException('Bu email allaqachon ro\'yxatdan o\'tgan');
+      throw new BadRequestException("Bu email allaqachon ro'yxatdan o'tgan");
     }
 
     // Parolni bcrypt bilan hash qilish
@@ -71,7 +75,7 @@ export class AuthService {
       name: dto.name,
       email: dto.email,
       password: hashedPassword,
-      role: UserRole.TOURIST,          // Default rol
+      role: UserRole.TOURIST, // Default rol
       isVerified: false,
       isActive: true,
       isApprovedByAdmin: false,
@@ -80,13 +84,10 @@ export class AuthService {
     });
 
     // OTP emailga yuborish
-    await this.emailSender.sendOtpEmail(
-      dto.email,
-      otp,
-    );
+    await this.emailSender.sendOtpEmail(dto.email, otp);
 
     return {
-      message: 'Ro\'yxatdan o\'tdingiz. Emailingizga tasdiqlash kodi yuborildi.',
+      message: "Ro'yxatdan o'tdingiz. Emailingizga tasdiqlash kodi yuborildi.",
     };
   }
 
@@ -118,21 +119,21 @@ export class AuthService {
   // ═══════════════════════════════════════════════════════════════
   /** Tizimga kirish — JWT access + refresh token qaytaradi */
   // ═══════════════════════════════════════════════════════════════
-  async signIn(dto: SignInDto): Promise<AuthTokens> {
+  async signIn(dto: SignInDto): Promise<AuthTokens & { user: any }> {
     // Password + refreshToken ni select qilib topish
     const user = await this.userService.findByEmailWithPassword(dto.email);
-    
+
     // console.log('User topildi:', user ? 'HA' : 'YOQ');
-    
+
     if (!user) {
       // Xavfsizlik: "email yoki parol noto'g'ri" deb xabar berish
-      throw new UnauthorizedException('Email yoki parol noto\'g\'ri');
+      throw new UnauthorizedException("Email yoki parol noto'g'ri");
     }
 
     // Parol solishtirish
     const isPasswordMatch = await bcrypt.compare(dto.password, user.password);
     if (!isPasswordMatch) {
-      throw new UnauthorizedException('Email yoki parol noto\'g\'ri');
+      throw new UnauthorizedException("Email yoki parol noto'g'ri");
     }
 
     // Email tasdiqlanganligini tekshirish
@@ -145,7 +146,7 @@ export class AuthService {
     // Hisob aktiv ekanligini tekshirish
     if (!user.isActive) {
       throw new ForbiddenException(
-        'Hisobingiz bloklangan. Admin bilan bog\'laning.',
+        "Hisobingiz bloklangan. Admin bilan bog'laning.",
       );
     }
 
@@ -166,7 +167,44 @@ export class AuthService {
     const hashedRefresh = await this.hashValue(tokens.refreshToken);
     await this.userService.saveRefreshToken(user.id, hashedRefresh);
 
-    return tokens;
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  /** Google orqali tizimga kirish */
+  // ═══════════════════════════════════════════════════════════════
+
+  // google login
+  async googleLogin(userData: any) {
+    const user = await this.userGoogleService.findOrCreate(userData);
+    // const payload = { id: user.id, email: user.email, roles: user.role };
+    // const access_token = await this.jwtService.signAsync(payload);
+    
+    // Tokenlar generatsiya
+    const tokens = await this.generateTokens(user);
+
+    // Refresh tokenni hash qilib saqlash
+    const hashedRefresh = await this.hashValue(tokens.refreshToken);
+    await this.userService.saveRefreshToken(user.id, hashedRefresh);
+
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+      message: 'Success',
+    };
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -178,7 +216,7 @@ export class AuthService {
     // Xavfsizlik: email mavjud bo'lmasa ham bir xil javob
     if (!user) {
       return {
-        message: 'Agar bu email ro\'yxatdan o\'tgan bo\'lsa, kod yuborildi.',
+        message: "Agar bu email ro'yxatdan o'tgan bo'lsa, kod yuborildi.",
       };
     }
 
@@ -225,7 +263,9 @@ export class AuthService {
         secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
       });
     } catch {
-      throw new UnauthorizedException('Refresh token yaroqsiz yoki muddati o\'tgan');
+      throw new UnauthorizedException(
+        "Refresh token yaroqsiz yoki muddati o'tgan",
+      );
     }
 
     // DB dan foydalanuvchini topish (refreshToken select:false)
@@ -276,11 +316,17 @@ export class AuthService {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.getOrThrow<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRES', '15m') as any,
+        expiresIn: this.configService.get<string>(
+          'JWT_ACCESS_EXPIRES',
+          '15m',
+        ) as any,
       }),
       this.jwtService.signAsync(payload, {
         secret: this.configService.getOrThrow<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES', '7d') as any,
+        expiresIn: this.configService.get<string>(
+          'JWT_REFRESH_EXPIRES',
+          '7d',
+        ) as any,
       }),
     ]);
 
@@ -296,11 +342,11 @@ export class AuthService {
   /** OTP to'g'riligini va muddatini tekshirish — umumiy helper */
   private validateOtp(user: User, inputOtp: string): void {
     if (!user.otpCode || !user.otpCreatedAt) {
-      throw new BadRequestException('OTP kod topilmadi. Qayta so\'rang.');
+      throw new BadRequestException("OTP kod topilmadi. Qayta so'rang.");
     }
 
     if (user.otpCode !== inputOtp) {
-      throw new BadRequestException('OTP kod noto\'g\'ri');
+      throw new BadRequestException("OTP kod noto'g'ri");
     }
 
     const otpExpiresMs = Number(

@@ -2,10 +2,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -29,6 +31,7 @@ import { User } from './user/user.entity';
 import { SignInDto } from './dto/sign-in-dto';
 import { ResetPasswordDto } from './dto/rest-password.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -76,6 +79,32 @@ export class AuthController {
   })
   signIn(@Body() dto: SignInDto): Promise<AuthTokens> {
     return this.authService.signIn(dto);
+  }
+
+  // ───────────────────────────────────────────────────────────── google
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  authGoogle() {}
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleRedirect(@Req() req: any, @Res() res: any) {
+    // 1. AuthService dan endi { accessToken, refreshToken, user } qaytadi
+    const result = await this.authService.googleLogin(req.user);
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
+    // 2. Ma'lumotlarni xavfsiz paketlash (URL da buzilmasligi uchun)
+    const authData = Buffer.from(
+      JSON.stringify({
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+        user: result.user,
+      }),
+    ).toString('base64');
+
+    // 3. Frontenddagi yagona qabul qilish nuqtasiga yuboramiz
+    return res.redirect(`${frontendUrl}/auth-success?data=${authData}`);
   }
 
   // ─────────────────────────────────────────────────────────────

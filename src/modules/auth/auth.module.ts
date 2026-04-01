@@ -16,12 +16,16 @@ import { EmailSender } from '../../utils/email-sender';
 import { UserController } from './user/user.controller';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/common/guards/roles.guard';
+import { SocialAccount } from './user/socialAccount.entity';
+import { ProfileModule } from '../profile/profile.module';
+import { GoogleStrategy } from './google-strategy';
+import { UserGoogleModule } from './user_google/user_google.module';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, SocialAccount]),
 
     // JwtModule async konfiguratsiya — ConfigService orqali
     JwtModule.registerAsync({
@@ -34,6 +38,8 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
         },
       }),
     }),
+    UserGoogleModule,
+    ProfileModule,
   ],
   controllers: [AuthController, UserController],
   providers: [
@@ -43,6 +49,8 @@ import { RolesGuard } from 'src/common/guards/roles.guard';
     JwtAuthGuard,
     RolesGuard,
     EmailSender,
+    JwtStrategy,
+    GoogleStrategy,
   ],
   exports: [
     AuthService,
